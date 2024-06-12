@@ -10,8 +10,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v2
+
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v1
+      with:
+        version: 'v1.20.0' # O la versión que necesites
+
+    - name: Print base64 KUBE_CONFIG
+      run: echo "${{ secrets.KUBE_CONFIG }}"
+
+    - name: Decode and print kubeconfig
+      run: |
+        echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode
+      shell: bash
 
     - name: Configure kubeconfig
       run: |
@@ -25,7 +38,8 @@ jobs:
         KUBECONFIG: $HOME/.kube/config
 
     - name: Apply deployment manifest
-      run: kubectl apply -f deployment.yaml --validate=false
+      run: |
+        kubectl apply -f deployment.yaml
       env:
         KUBECONFIG: $HOME/.kube/config
 
