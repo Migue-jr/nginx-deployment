@@ -32,7 +32,6 @@ jobs:
           echo "${{ secrets.KUBECONFIG }}" | base64 --decode > ~/.kube/config
           cat ~/.kube/config # Añadir esto para verificar el contenido de kubeconfig
 
-
       - name: Debug kubeconfig
         run: cat ~/.kube/config
 
