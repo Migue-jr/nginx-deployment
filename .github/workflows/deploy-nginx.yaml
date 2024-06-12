@@ -30,6 +30,7 @@ jobs:
         run: |
           mkdir -p ~/.kube
           echo "${{ secrets.KUBECONFIG }}" > ~/.kube/config
+          cat ~/.kube/config
 
       - name: Apply Kubernetes Manifests
         run: |
