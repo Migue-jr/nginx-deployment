@@ -32,6 +32,14 @@ jobs:
           echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > ~/.kube/config
           cat ~/.kube/config
 
+      - name: Verify kubeconfig
+        run: |
+          ls -la ~/.kube
+          cat ~/.kube/config
+          kubectl config view
+        env:
+          KUBECONFIG: ~/.kube/config
+
       - name: Apply Kubernetes Manifests
         run: |
           kubectl apply -f deployment.yaml
