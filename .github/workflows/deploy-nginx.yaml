@@ -31,11 +31,12 @@ jobs:
           mkdir -p ~/.kube
           echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > ~/.kube/config
           cat ~/.kube/config
+          ls -la ~/.kube
+        env:
+          KUBECONFIG: ~/.kube/config
 
       - name: Verify kubeconfig
         run: |
-          ls -la ~/.kube
-          cat ~/.kube/config
           kubectl config view
         env:
           KUBECONFIG: ~/.kube/config
