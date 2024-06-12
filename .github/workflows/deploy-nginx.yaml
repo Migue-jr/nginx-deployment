@@ -30,7 +30,13 @@ jobs:
         run: |
           mkdir -p ~/.kube
           echo "${{ secrets.KUBECONFIG }}" | base64 --decode > ~/.kube/config
+          chmod 600 ~/.kube/config
+          kubectl config view # Verificar el contenido del archivo kubeconfig
           cat ~/.kube/config # Añadir esto para verificar el contenido de kubeconfig
+
+      - name: Verify kubeconfig content
+        run: cat ~/.kube/config
+
 
       - name: Debug kubeconfig
         run: cat ~/.kube/config
