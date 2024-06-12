@@ -28,35 +28,30 @@ jobs:
 
       - name: Configure kubeconfig
         run: |
-          mkdir -p /home/runner/.kube
-          echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > /home/runner/.kube/config
-          chmod 600 /home/runner/.kube/config
-          ls -la /home/runner/.kube
-          cat /home/runner/.kube/config
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+          cat $HOME/.kube/config
         env:
-          KUBECONFIG: /home/runner/.kube/config
+          KUBECONFIG: $HOME/.kube/config
 
       - name: Verify kubeconfig
-        run: |
-          kubectl config view
+        run: kubectl config view
         env:
-          KUBECONFIG: /home/runner/.kube/config
+          KUBECONFIG: $HOME/.kube/config
 
       - name: Apply deployment manifest
-        run: |
-          kubectl apply -f deployment.yaml
+        run: kubectl apply -f deployment.yaml
         env:
-          KUBECONFIG: /home/runner/.kube/config
+          KUBECONFIG: $HOME/.kube/config
 
       - name: Apply service manifest
-        run: |
-          kubectl apply -f service.yaml
+        run: kubectl apply -f service.yaml
         env:
-          KUBECONFIG: /home/runner/.kube/config
+          KUBECONFIG: $HOME/.kube/config
 
       - name: Apply service monitor manifest
-        run: |
-          kubectl apply -f service-monitor.yaml
+        run: kubectl apply -f service-monitor.yaml
         env:
-          KUBECONFIG: /home/runner/.kube/config
+          KUBECONFIG: $HOME/.kube/config
 
