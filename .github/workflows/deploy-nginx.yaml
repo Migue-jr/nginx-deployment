@@ -26,27 +26,23 @@ jobs:
         with:
           version: 'v1.18.0'
 
-      - name: Configure kubeconfig
-        run: |
-          mkdir -p ~/.kube
-          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > ~/.kube/config
-          chmod 600 ~/.kube/config
-          kubectl config view # Verificar el contenido del archivo kubeconfig
-          cat ~/.kube/config # Añadir esto para verificar el contenido de kubeconfig
-
-      - name: Verify kubeconfig content
-        run: cat ~/.kube/config
-
-
-      - name: Debug kubeconfig
-        run: cat ~/.kube/config
-
+      - name: Authorize kubectl with kubeconfig
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
 
       - name: Apply Kubernetes Manifests
-        run: |
-          kubectl apply -f deployment.yaml
-          kubectl apply -f service.yaml
-          kubectl apply -f service-monitor.yaml
-        env:
-          KUBECONFIG: ~/.kube/config
+        uses: actions-hub/kubectl@master
+        with:
+          args: apply -f deployment.yaml
+
+      - name: Apply Kubernetes Service
+        uses: actions-hub/kubectl@master
+        with:
+          args: apply -f service.yaml
+
+      - name: Apply Kubernetes Service Monitor
+        uses: actions-hub/kubectl@master
+        with:
+          args: apply -f service-monitor.yaml
 
