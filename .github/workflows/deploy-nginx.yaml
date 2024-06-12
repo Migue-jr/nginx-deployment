@@ -40,6 +40,15 @@ jobs:
         env:
           KUBECONFIG: $HOME/.kube/config
 
+      - name: Debug KUBECONFIG
+        run: |
+          echo "$KUBECONFIG"
+          ls -la $HOME/.kube
+          cat $HOME/.kube/config
+        env:
+          KUBECONFIG: $HOME/.kube/config
+
+
       - name: Apply deployment manifest
         run: kubectl apply -f deployment.yaml
         env:
