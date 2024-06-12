@@ -26,23 +26,17 @@ jobs:
         with:
           version: 'v1.18.0'
 
-      - name: Authorize kubectl with kubeconfig
-        uses: actions-hub/kubectl@master
-        env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > ~/.kube/config
+          cat ~/.kube/config
 
       - name: Apply Kubernetes Manifests
-        uses: actions-hub/kubectl@master
-        with:
-          args: apply -f deployment.yaml
-
-      - name: Apply Kubernetes Service
-        uses: actions-hub/kubectl@master
-        with:
-          args: apply -f service.yaml
-
-      - name: Apply Kubernetes Service Monitor
-        uses: actions-hub/kubectl@master
-        with:
-          args: apply -f service-monitor.yaml
+        run: |
+          kubectl apply -f deployment.yaml
+          kubectl apply -f service.yaml
+          kubectl apply -f service-monitor.yaml
+        env:
+          KUBECONFIG: ~/.kube/config
 
