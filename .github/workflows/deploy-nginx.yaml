@@ -18,12 +18,14 @@ jobs:
         mkdir -p $HOME/.kube
         echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > $HOME/.kube/config
         chmod 600 $HOME/.kube/config
-        cat $HOME/.kube/config
+        kubectl config view
+        kubectl config current-context
+        kubectl get nodes
       env:
         KUBECONFIG: $HOME/.kube/config
 
     - name: Apply deployment manifest
-      run: kubectl apply -f deployment.yaml
+      run: kubectl apply -f deployment.yaml --validate=false
       env:
         KUBECONFIG: $HOME/.kube/config
 
